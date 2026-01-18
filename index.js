@@ -73,7 +73,7 @@ app.post('/users/register', async (req, res) => {
         if (!newUser) return res.status(400).json({ error: 'no fue posible crear el usuario' });
 
         const payload = { user: { id: newUser._id } };
-        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '24h' });
 
         const populated = await User.findById(newUser._id).populate('cart').lean();
         if (populated && populated.password) delete populated.password;
@@ -82,7 +82,7 @@ app.post('/users/register', async (req, res) => {
         
     } catch (error) {
         return res.status(500).json({
-            message: 'Error creating user',
+            message: 'Error creando usuario',
             error: error.message,
         });
     }
@@ -105,7 +105,7 @@ app.post('/users/login', async (req, res) => {
         }
 
         const payload = { user: { id: foundUser._id } };
-        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '24h' });
         const { password: _, ...userData } = foundUser.toObject();
 
         return res.status(200).json({ datos: userData, token });
@@ -138,7 +138,7 @@ app.post('/user/login', async (req, res) => {
         jwt.sign(
                 payload,
                 secret = process.env.SECRET,
-                { expiresIn: '1h' },
+                { expiresIn: '24h' },
                 (error, token) => {
                     if (error) throw error;
                     res.json({ token });
@@ -147,7 +147,7 @@ app.post('/user/login', async (req, res) => {
     
         } catch (error) {
             return res.status(500).json({
-                message: 'Error logging in',
+                message: 'Error al iniciar sesión',
                 error: error.message,
             });
         }
@@ -160,40 +160,12 @@ app.get('/user/verify-user', auth, async (req, res) => {
         
     } catch (error) {
         return res.status(500).json({
-            message: 'Error verifying user',
+            message: 'Error verificando usuario',
             error: error.message,
         });
     }
 });    
 
-// app.get('/users', async (req, res) => {
-//     try {
-//         const users = await User.find({});
-//         return res.status(200).json({ users });
-//     } catch (error) {
-//         return res.status(500).json({ 
-//             message: 'Error retrieving users',
-//             error: error.message
-//          });
-//     }
-// });
-
-
-// app.post('/users', async (req, res) => {
-//     try {
-//         const { username, email, password } = req.body;
-//         const newUser = await User.create({ username, email, password });
-
-//         if (!newUser) return res.status(400).json({ error: 'no fue posible crear el usuario' });
-
-//         return res.status(201).json( {datos: newUser });
-//     } catch (error) {
-//         return res.status(500).json({
-//             message: 'Error creating user',
-//             error: error.message,
-//         });
-//     }
-// });
 
 
 
@@ -209,12 +181,12 @@ app.put('/users/update', auth, async (req, res) => {
     )
 
     if (!updatedUser) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ error: 'Usuario no encontrado' });
     }
     return res.status(200).json({ usuarioActualizado: updatedUser });
     } catch (error) {
         return res.status(500).json({
-            message: 'Error updating user',
+            message: 'Error actualizando usuario',
             error: error.message,
         });
     }
@@ -222,22 +194,6 @@ app.put('/users/update', auth, async (req, res) => {
 
 
 
-// app.delete('/users/:id', async (req, res) => {
-//     try {
-//         const deletedUser = await User.findByIdAndDelete(req.params.id);
-//         if (!deletedUser) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-//         return res.status(200).json({ message: 'User deleted successfully' });
-//     } catch (error) {
-//         return res.status(500).json({
-//             message: 'Error deleting user',
-//             error: error.message,
-//         });
-//     }   
-// }); 
-
-
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`El servidor está corriendo en el puerto ${PORT}`);
 });

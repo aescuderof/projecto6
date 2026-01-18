@@ -24,11 +24,11 @@ exports.createUser = async (req, res) => {
              cart: newCart
             });
             
-            if (!newUser) return res.status(400).json({ error: 'no fue posible crear el usuario' });
+            if (!newUser) return res.status(400).json({ error: 'No fue posible crear el usuario' });
             return res.status(201).json({ datos: newUser });
             } catch (error) {
             return res.status(500).json({
-                message: 'Error creating user',
+                message: 'Error creando usuario',
                 error: error.message,
         })
     }

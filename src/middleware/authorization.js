@@ -4,13 +4,13 @@ module.exports = (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization) {
-        return res.status(401).json({ message: 'No token provided' });
+        return res.status(401).json({ message: 'Sin token' });
     }
 
     const [scheme, token] = authorization.split(' ');
 
     if (!token || (scheme !== 'Bearer' && scheme !== 'Token')) {
-        return res.status(401).json({ message: 'Invalid token type' });
+        return res.status(401).json({ message: 'Token inválido' });
     }
 
     try {
@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
         req.user = decoded.user;
         return next();
     } catch (error) {
-        return res.status(401).json({ message: 'Invalid token', error: error.message });
+        return res.status(401).json({ message: 'Token inválido', error: error.message });
     }
 
 }

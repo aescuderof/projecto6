@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Guitar = require('../models/Guitar');
 // traer modelo de Guitar
 exports.getAllGuitars = async (req, res) => {
@@ -7,6 +8,26 @@ exports.getAllGuitars = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             message: 'Error retrieving guitars',
+            error: error.message,
+        });
+    }
+};
+
+// obtener una guitarra por id
+exports.getGuitarById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Formato de id inválido' });
+        }
+        const guitar = await Guitar.findById(id);
+        if (!guitar) {
+            return res.status(404).json({ error: 'Guitarra no encontrada' });
+        }
+        return res.status(200).json({ guitar });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Error buscando guitarra por ID',
             error: error.message,
         });
     }
@@ -34,6 +55,9 @@ exports.createGuitar = async (req, res) => {
 exports.updateGuitar = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Formato de id inválido' });
+        }
         const { name, price, description } = req.body;
         const updatedGuitar = await Guitar.findByIdAndUpdate(
             id,
@@ -56,6 +80,9 @@ exports.updateGuitar = async (req, res) => {
 exports.deleteGuitar = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Formato de id inválido' });
+        }
         const deletedGuitar = await Guitar.findByIdAndDelete(id);
         if (!deletedGuitar) {
             return res.status(404).json({ error: 'Guitar not found' });
@@ -73,6 +100,9 @@ exports.deleteGuitar = async (req, res) => {
 exports.deleteGuitar = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Formato de id inválido' });
+        }
         const deletedGuitar = await Guitar.findByIdAndDelete(id);
         if (!deletedGuitar) {
             return res.status(404).json({ error: 'Guitar not found' });
