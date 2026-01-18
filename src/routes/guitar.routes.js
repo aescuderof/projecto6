@@ -6,8 +6,8 @@ const guitarRouter = express.Router();
 guitarRouter.get('/', getAllGuitars ) //localhost:3000/guitars
 guitarRouter.get('/:id', getGuitarById ) // localhost:3000/guitars/:id
 guitarRouter.post('/', createGuitar ) // localhost:3000/guitars
-guitarRouter.put('/:id', updateGuitar ) // localhost:3000/guitars/:id
-guitarRouter.delete('/:id', deleteGuitar ) // localhost:3000/guitars/:id
+guitarRouter.put('/:id', updateGuitar ) 
+guitarRouter.delete('/:id', deleteGuitar ) 
 
 module.exports = guitarRouter;
 
